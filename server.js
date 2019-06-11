@@ -9,18 +9,25 @@ app.get('/', function(req, res){
 
 io.on('connection', function(socket){
     socket.on('onKeyDown', function(key){
+        var translateParams = {x:0, y:0, z:0, distance: 0}
         switch (key) {
             case "left":
-                var translateParams = {x:1, y:0, z:0, distance: -.1}
-                io.emit('translateOnAxis', translateParams);
+                translateParams.x = 1;
+                translateParams.distance = -.1;
                 break;
             case "up":
+                translateParams.z = 1;
+                translateParams.z = -.1;
                 break;
             case "right":
+                translateParams.x = 1;
+                translateParams.distance = .1;
                 break;
             case "down":
-                break;
+                translateParams.z = 1;
+                translateParams.z = .1;
         }
+        io.emit('translateOnAxis', translateParams);
     });
 });
 
