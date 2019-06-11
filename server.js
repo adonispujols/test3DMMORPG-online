@@ -12,6 +12,7 @@ io.on('connection', function(socket){
         var translateParams = {x:0, y:0, z:0, distance: 0}
         switch (key) {
             case "left":
+            console.log("LEEEFT");
                 translateParams.x = 1;
                 translateParams.distance = -.1;
                 break;
