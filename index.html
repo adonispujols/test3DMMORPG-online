@@ -12,11 +12,6 @@
     <script src= "https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script>
         'use strict';
-        $(function () {
-            var socket = io();
-
-            socket.emit('onEvent');
-        });
         const canvas = document.querySelector('#canvas');
         const renderer = new THREE.WebGLRenderer({canvas});
         renderer.setSize( window.innerWidth, window.innerHeight );
@@ -46,18 +41,51 @@
         const cube = new THREE.Mesh(geometry, material);
 
         scene.add(cube);
-        var count = 0;
-        function animate() {
-            if (count <= 1000) {
-                cube.translateX(.05)
-            } else if (count <= 2000) {
-                cube.translateZ(.05)
+        renderer.render(scene, camera);
+        // var count = 0;
+        // function animate() {
+        //     if (count <= 1000) {
+        //         cube.translateX(.05)
+        //     } else if (count <= 2000) {
+        //         cube.translateZ(.05)
+        //     }
+        //     renderer.render(scene, camera);
+        //     count += 33;
+        //     var timer = setTimeout(animate, 33);
+        // }
+        // animate()
+        $(function () {
+            var socket = io();
+
+            window.addEventListener('keydown', onKeyDown);
+            function onKeyDown(event) {
+                var key;
+                switch (event.keyCode) {
+                    case 37:
+                        key = "left";
+                        break;
+                    case 38:
+                        key = "up";
+                        break;
+                    case 39:
+                        key = "right";
+                        break;
+                    case 40:
+                        key = "down";
+                        break;
+                    default:
+                        key = "NOT_SUPPORTED";
+                }
+                if (key != "NOT_SUPPORTED") {
+                    socket.emit('onKeyDown', key);
+                }
             }
-            renderer.render(scene, camera);
-            count += 33;
-            var timer = setTimeout(animate, 33);
-        }
-        animate()
+
+            socket.on('translateOnAxis', function(translateParams){
+                console.log('on translateOnAxis Event');
+                cube.translateOnAxis(new THREE.Vector3(translateParams.x, translateParams.y, translateParams.z), translateParams.distance)
+            });
+        });
     </script>
 </body>
 </html>

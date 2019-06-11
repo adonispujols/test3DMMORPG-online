@@ -9,8 +9,21 @@ app.get('/', function(req, res){
 
 io.on('connection', function(socket){
     console.log('connected');
-     socket.on('onEvent', function(msg){
-        console.log('got event');
+
+    socket.on('onKeyDown', function(key){
+        console.log('onKeyDown event');
+        switch (key) {
+            case "left":
+                var translateParams = {x:1, y:0, z:0, distance: -1}
+                io.emit('translateOnAxis', translateParams);
+                break;
+            case "up":
+                break;
+            case "right":
+                break;
+            case "down":
+                break;
+        }
     });
 });
 
