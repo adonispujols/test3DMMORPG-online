@@ -19,6 +19,7 @@
         function initScene() {
             const canvas = document.querySelector('#canvas');
             const renderer = new THREE.WebGLRenderer({canvas});
+            const scene = new THREE.Scene();
 
             const fov = 75;
             const aspect = 2;
@@ -40,7 +41,6 @@
             const material = new THREE.MeshPhongMaterial({color: 0x44aa88});
             const cube = new THREE.Mesh(geometry, material);
 
-            const scene = new THREE.Scene();
             scene.add(cube);
 
             function render(time) {
