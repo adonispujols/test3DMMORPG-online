@@ -14,6 +14,8 @@
         'use strict';
         $(function () {
             var socket = io();
+
+            socket.emit('onEvent');
         });
         const canvas = document.querySelector('#canvas');
         const renderer = new THREE.WebGLRenderer({canvas});

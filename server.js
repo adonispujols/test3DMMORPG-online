@@ -9,6 +9,9 @@ app.get('/', function(req, res){
 
 io.on('connection', function(socket){
     console.log('connected');
+     socket.on('onEvent', function(msg){
+        console.log('got event');
+    });
 });
 
 http.listen(port, function(){
