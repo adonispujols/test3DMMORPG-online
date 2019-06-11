@@ -12,14 +12,12 @@ io.on('connection', function(socket){
         var translateParams = {x:0, y:0, z:0, distance: 0}
         switch (key) {
             case "left":
-            console.log("LEEEFT");
                 translateParams.x = 1;
                 translateParams.distance = -.1;
                 break;
             case "up":
-            console.log("UPPPPP");
                 translateParams.z = 1;
-                translateParams.z = -.1;
+                translateParams.distance = -.1;
                 break;
             case "right":
                 translateParams.x = 1;
@@ -27,7 +25,7 @@ io.on('connection', function(socket){
                 break;
             case "down":
                 translateParams.z = 1;
-                translateParams.z = .1;
+                translateParams.distance = .1;
                 break;
         }
         io.emit('translateOnAxis', translateParams);
