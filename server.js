@@ -16,6 +16,7 @@ io.on('connection', function(socket){
                 translateParams.distance = -.1;
                 break;
             case "up":
+            console.log("UPPPPP");
                 translateParams.z = 1;
                 translateParams.z = -.1;
                 break;
