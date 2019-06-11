@@ -28,6 +28,7 @@ io.on('connection', function(socket){
             case "down":
                 translateParams.z = 1;
                 translateParams.z = .1;
+                break;
         }
         io.emit('translateOnAxis', translateParams);
     });
