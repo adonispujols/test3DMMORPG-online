@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Test Online 3D MMORPG</title>
+    <style>
+        body {
+            margin: 0;
+        }
+    </style>
 </head>
 <body>
     <canvas id="canvas"></canvas>
@@ -12,9 +17,9 @@
     <script src= "https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script>
         'use strict';
-        const canvas = document.querySelector('#canvas');
+       const canvas = document.querySelector('#canvas');
         const renderer = new THREE.WebGLRenderer({canvas});
-        renderer.setSize( window.innerWidth, window.innerHeight );
+        renderer.setSize( window.innerWidth * .9, window.innerHeight * .9);
         document.body.appendChild( renderer.domElement );
 
         const scene = new THREE.Scene();
@@ -47,18 +52,6 @@
             var timer = setTimeout(run, framesPerSecond);
         }
         run();
-        // var count = 0;
-        // function animate() {
-        //     if (count <= 1000) {
-        //         cube.translateX(.05)
-        //     } else if (count <= 2000) {
-        //         cube.translateZ(.05)
-        //     }
-        //     renderer.render(scene, camera);
-        //     count += 33;
-        //     var timer = setTimeout(animate, 33);
-        // }
-        // animate()
 
         $(function () {
             var socket = io();
