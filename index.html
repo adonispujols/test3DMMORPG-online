@@ -43,17 +43,12 @@
 
             scene.add(cube);
 
-            function render(time) {
-                time *= 0.001;  // convert time to seconds
-
-                // cube.rotation.x = time;
-                // cube.rotation.y = time;
-                cube.translateX(time);
-
+            function render() {
+                cube.translateX(.5);
                 renderer.render(scene, camera);
-                requestAnimationFrame(render);
-              }
-          requestAnimationFrame(render);
+                var timer = setTimeout(render, 33);
+            }
+            render()
         }
         initScene();
     </script>
