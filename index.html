@@ -15,42 +15,47 @@
         $(function () {
             var socket = io();
         });
+        const canvas = document.querySelector('#canvas');
+        const renderer = new THREE.WebGLRenderer({canvas});
+        renderer.setSize( window.innerWidth, window.innerHeight );
+        document.body.appendChild( renderer.domElement );
 
-        function initScene() {
-            const canvas = document.querySelector('#canvas');
-            const renderer = new THREE.WebGLRenderer({canvas});
-            const scene = new THREE.Scene();
+        const scene = new THREE.Scene();
 
-            const fov = 75;
-            const aspect = 2;
-            const near = 0.1;
-            const far = 5;
-            const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
-            camera.position.z = 2;
+        const fov = 75;
+        const aspect = window.innerWidth/window.innerHeight;
+        const near = 0.1;
+        const far = 1000;
+        const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
+        camera.position.y = 1.5;
+        camera.position.z = 5;
 
-            const color = 0xFFFFFF;
-            const intensity = 1;
-            const light = new THREE.DirectionalLight(color, intensity);
-            light.position.set(-1, 2, 4);
-            scene.add(light);
+        const color = 0xFFFFFF;
+        const intensity = 1;
+        const light = new THREE.DirectionalLight(color, intensity);
+        light.position.set(-1, 2, 4);
+        scene.add(light);
 
-            const boxWidth = 1;
-            const boxHeight = 1;
-            const boxDepth = 1;
-            const geometry = new THREE.BoxGeometry(boxWidth, boxHeight, boxDepth);
-            const material = new THREE.MeshPhongMaterial({color: 0x44aa88});
-            const cube = new THREE.Mesh(geometry, material);
+        const boxWidth = 1;
+        const boxHeight = 1;
+        const boxDepth = 1;
+        const geometry = new THREE.BoxGeometry(boxWidth, boxHeight, boxDepth);
+        const material = new THREE.MeshPhongMaterial({color: 0x44aa88});
+        const cube = new THREE.Mesh(geometry, material);
 
-            scene.add(cube);
-
-            function render() {
-                cube.translateX(.05);
-                renderer.render(scene, camera);
-                var timer = setTimeout(render, 33);
+        scene.add(cube);
+        var count = 0;
+        function animate() {
+            if (count <= 1000) {
+                cube.translateX(.05)
+            } else if (count <= 2000) {
+                cube.translateZ(.05)
             }
-            render()
+            renderer.render(scene, camera);
+            count += 33;
+            var timer = setTimeout(animate, 33);
         }
-        initScene();
+        animate()
     </script>
 </body>
 </html>
