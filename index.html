@@ -6,13 +6,40 @@
     <title>Test Online 3D MMORPG</title>
 </head>
 <body>
-    <p style="font-size: 50px;">Hello, 世界!</p>
+    <canvas id="canvas"></canvas>
+    <script src="https://threejsfundamentals.org/threejs/resources/threejs/r105/three.min.js"></script>
     <script src= "https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
-    <script src= "https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src= "https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script>
+        'use strict';
         $(function () {
             var socket = io();
         });
+
+        function initScene() {
+          const canvas = document.querySelector('#canvas');
+          const renderer = new THREE.WebGLRenderer({canvas});
+
+          const fov = 75;
+          const aspect = 2;  // the canvas default
+          const near = 0.1;
+          const far = 5;
+          const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
+          camera.position.z = 2;
+
+          const boxWidth = 1;
+          const boxHeight = 1;
+          const boxDepth = 1;
+          const geometry = new THREE.BoxGeometry(boxWidth, boxHeight, boxDepth);
+          const material = new THREE.MeshBasicMaterial({color: 0x44aa88});
+          const cube = new THREE.Mesh(geometry, material);
+
+          const scene = new THREE.Scene();
+          scene.add(cube);
+
+          renderer.render(scene, camera);
+        }
+        initScene();
     </script>
 </body>
 </html>
