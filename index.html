@@ -62,13 +62,11 @@
 
             function createNewBox(newUserID, position) {
                 const BOX_WIDTH = 1;
-                const BOX_HEIGHT = 1;
+                const BOX_HEIGHT = 1; // UPDATE IN SERVER.JS TOO (hacky way)
                 const BOX_DEPTH = 1;
                 const geometry = new THREE.BoxGeometry(BOX_WIDTH, BOX_WIDTH, BOX_DEPTH);
                 const material = new THREE.MeshPhongMaterial({color: 0x44aa88});
                 const cube = new THREE.Mesh(geometry, material);
-                cube.position.set(0, BOX_HEIGHT / 2, 0);
-
                 cube.position.set(position.x, position.y, position.z);
                 boxMap[newUserID] = cube;
                 scene.add(cube);

@@ -11,7 +11,7 @@ app.get('/', function(req, res) {
 
 io.on('connection', function(socket) {
     socket.on('sentID', function(userID) {
-        boxCoords[userID] = {x: 0, y: 0, z: 0};
+        boxCoords[userID] = {x: 0, y: 1 / 2, z: 0};
         io.emit('userJoined', boxCoords);
     });
 
