@@ -120,7 +120,7 @@
                     keys.forEach(function(key){
                         createNewBox(key, boxCoords[key]);
                     });
-                    boxMap[Object.keys(boxCoords).length - 1].add(camera);
+                    boxMap[Object.keys(boxMap).length - 1].add(camera);
                     setupKeyDownListener();
                 }
                 inGame = true;
@@ -129,7 +129,6 @@
             socket.on('translateOnAxis', function(data) {
                 boxMap[data.userID].translateOnAxis(new THREE.Vector3(data.translateParams.x, data.translateParams.y, data.translateParams.z), data.translateParams.distance);
             });
-
         });
     </script>
 </body>
