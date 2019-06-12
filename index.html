@@ -107,14 +107,14 @@
                 socket.emit('sentID', userID);
             });
 
-            socket.on('userJoined', function(userID) {
-                const element = document.getElementById('submitID');
-                element.parentNode.removeChild(element);
+            socket.on('userJoined', function(newUserID) {
                 if (inGame) {
-                    createNewBox(userID);
+                    createNewBox(newUserID);
                 } else {
+                    const element = document.getElementById('submitID');
+                    element.parentNode.removeChild(element);
                     setupScene();
-                    createNewBox(userID);
+                    createNewBox(newUserID);
                     setupKeyDownListener();
                 }
                 inGame = true;
