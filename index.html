@@ -60,7 +60,7 @@
                 run();
             }
 
-            function createNewBox(userID) {
+            function createNewBox(newUserID) {
                 const BOX_WIDTH = 1;
                 const BOX_HEIGHT = 1;
                 const BOX_DEPTH = 1;
@@ -68,7 +68,7 @@
                 const material = new THREE.MeshPhongMaterial({color: 0x44aa88});
                 const cube = new THREE.Mesh(geometry, material);
 
-                boxMap[userID] = cube;
+                boxMap[newUserID] = cube;
                 scene.add(cube);
             }
 
