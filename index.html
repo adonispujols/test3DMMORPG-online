@@ -11,93 +11,118 @@
     </style>
 </head>
 <body>
+    <form onSubmit="return false">
+        <input id="id" autocomplete="off"/>
+        <button>Join</button>
+    </form>
     <canvas id="canvas"></canvas>
     <script src="https://threejsfundamentals.org/threejs/resources/threejs/r105/three.min.js"></script>
     <script src= "https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
     <script src= "https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script>
         'use strict';
-        const canvas = document.querySelector('#canvas');
-        const renderer = new THREE.WebGLRenderer({canvas});
-        renderer.setSize( window.innerWidth * .9, window.innerHeight * .9);
-        document.body.appendChild( renderer.domElement );
-
-        const scene = new THREE.Scene();
-
-        const FOV = 75;
-        const ASPECT = window.innerWidth/window.innerHeight;
-        const NEAR = 0.1;
-        const FAR = 1000;
-        const camera = new THREE.PerspectiveCamera(FOV, ASPECT, NEAR, FAR);
-        camera.position.y = 1.5;
-        camera.position.z = 5;
-
-        const COLOR = 0xFFFFFF;
-        const INTENSITY = 1;
-        const light = new THREE.DirectionalLight(COLOR, INTENSITY);
-        light.position.set(-1, 2, 4);
-        scene.add(light);
-
-        const BOX_WIDTH = 1;
-        const BOX_HEIGHT = 1;
-        const BOX_DEPTH = 1;
-        const geometry = new THREE.BoxGeometry(BOX_WIDTH, BOX_WIDTH, BOX_DEPTH);
-        const material = new THREE.MeshPhongMaterial({color: 0x44aa88});
-        const cube = new THREE.Mesh(geometry, material);
-
-        const geometry2 = new THREE.BoxGeometry(BOX_WIDTH, BOX_WIDTH, BOX_DEPTH);
-        const material2 = new THREE.MeshPhongMaterial({color: 0x44aa88});
-        const cube2 = new THREE.Mesh(geometry2, material2);
-        cube2.position.set(2, 1, 0);
-        cube2.material.color.setHex(0x88aaff);
-
-        var cubeArray = [cube, cube2];
-
-        scene.add(cube);
-        scene.add(cube2);
-        function run() {
-            const FRAMES_PER_SECOND = 33;
-            renderer.render(scene, camera);
-            const timer = setTimeout(run, FRAMES_PER_SECOND);
-        }
-        run();
-
         $(function () {
-            const socket = io();
-            var userID;
+            var canvas;
+            var renderer;
+            var scene;
+            var camera;
+            var light;
 
-            socket.on('userConnected', function(userIDCount){
-                userID = userIDCount;
-                console.log("userID: " + userID);
-            });
+            var boxMap = {};
 
-            socket.on('translateOnAxis', function(data){
-                cubeArray[data.userID].translateOnAxis(new THREE.Vector3(data.translateParams.x, data.translateParams.y, data.translateParams.z), data.translateParams.distance);
-            });
+            function setupScene() {
+                canvas = document.querySelector('#canvas');
+                renderer = new THREE.WebGLRenderer({canvas});
+                renderer.setSize( window.innerWidth * .9, window.innerHeight * .9);
+                document.body.appendChild( renderer.domElement );
 
-            window.addEventListener('keydown', onKeyDown);
-            function onKeyDown(event) {
-                var key;
-                switch (event.keyCode) {
-                    case 37:
-                        key = "left";
-                        break;
-                    case 38:
-                        key = "up";
-                        break;
-                    case 39:
-                        key = "right";
-                        break;
-                    case 40:
-                        key = "down";
-                        break;
-                    default:
-                        key = "NOT_SUPPORTED";
+                scene = new THREE.Scene();
+
+                const FOV = 75;
+                const ASPECT = window.innerWidth/window.innerHeight;
+                const NEAR = 0.1;
+                const FAR = 1000;
+                camera = new THREE.PerspectiveCamera(FOV, ASPECT, NEAR, FAR);
+                camera.position.y = 1.5;
+                camera.position.z = 5;
+
+                const COLOR = 0xFFFFFF;
+                const INTENSITY = 1;
+                light = new THREE.DirectionalLight(COLOR, INTENSITY);
+                light.position.set(-1, 2, 4);
+                scene.add(light);
+
+                function run() {
+                    const FRAMES_PER_SECOND = 33;
+                    renderer.render(scene, camera);
+                    const timer = setTimeout(run, FRAMES_PER_SECOND);
                 }
-                if (key != "NOT_SUPPORTED") {
-                    socket.emit('onKeyDown', {key: key, userID: userID});
+                run();
+            }
+
+            function createNewBox(userID) {
+                const BOX_WIDTH = 1;
+                const BOX_HEIGHT = 1;
+                const BOX_DEPTH = 1;
+                const geometry = new THREE.BoxGeometry(BOX_WIDTH, BOX_WIDTH, BOX_DEPTH);
+                const material = new THREE.MeshPhongMaterial({color: 0x44aa88});
+                const cube = new THREE.Mesh(geometry, material);
+
+                boxMap[userID] = cube;
+                scene.add(cube);
+            }
+
+            function setupKeyDownListener() {
+                window.addEventListener('keydown', onKeyDown);
+                function onKeyDown(event) {
+                    var key;
+                    switch (event.keyCode) {
+                        case 37:
+                            key = "left";
+                            break;
+                        case 38:
+                            key = "up";
+                            break;
+                        case 39:
+                            key = "right";
+                            break;
+                        case 40:
+                            key = "down";
+                            break;
+                        default:
+                            key = "NOT_SUPPORTED";
+                    }
+                    if (key != "NOT_SUPPORTED") {
+                        socket.emit('onKeyDown', {key: key, userID: userID});
+                    }
                 }
             }
+
+            const socket = io();
+            var userID;
+            var inGame = false;
+
+            $('form').submit(function() {
+                userID = $('#id').val();
+                socket.emit('sentID', userID);
+            });
+
+            socket.on('userJoined', function(userID) {
+                $( ".hello" ).remove();
+                if (inGame) {
+                    createNewBox(userID);
+                } else {
+                    setupScene();
+                    createNewBox(userID);
+                    setupKeyDownListener();
+                }
+                inGame = true;
+            });
+
+            socket.on('translateOnAxis', function(data) {
+                boxMap[data.userID].translateOnAxis(new THREE.Vector3(data.translateParams.x, data.translateParams.y, data.translateParams.z), data.translateParams.distance);
+            });
+
         });
     </script>
 </body>
