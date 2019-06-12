@@ -11,7 +11,7 @@
     </style>
 </head>
 <body>
-    <form onSubmit="return false">
+    <form id="submitID" onSubmit="return false">
         <input id="id" autocomplete="off"/>
         <button>Join</button>
     </form>
@@ -108,7 +108,7 @@
             });
 
             socket.on('userJoined', function(userID) {
-                $( ".hello" ).remove();
+                $( ".submitID" ).remove();
                 if (inGame) {
                     createNewBox(userID);
                 } else {
