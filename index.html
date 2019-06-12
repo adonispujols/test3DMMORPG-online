@@ -52,6 +52,25 @@
                 light.position.set(-1, 2, 4);
                 scene.add(light);
 
+                const textureLoader = new THREE.TextureLoader();
+                const planeTexture = textureLoader.load('checkerboard_texture.png');
+                planeTexture.wrapS = THREE.RepeatWrapping;
+                planeTexture.wrapT = THREE.RepeatWrapping;
+                planeTexture.magFilter = THREE.NearestFilter;
+                const PLANE_SIZE = 40;
+                const repeats = PLANE_SIZE / 2;
+                planeTexture.repeat.set(repeats, repeats);
+
+                const planeGeo = new THREE.PlaneBufferGeometry(PLANE_SIZE, PLANE_SIZE);
+                const planeMat = new THREE.MeshPhongMaterial({
+                    map: planeTexture,
+                    side: THREE.DoubleSide,
+                });
+                const planeMesh = new THREE.Mesh(planeGeo, planeMat);
+                planeMesh.rotation.x = Math.PI * -.5;
+
+                scene.add(planeMesh);
+
                 function run() {
                     const FRAMES_PER_SECOND = 33;
                     renderer.render(scene, camera);
