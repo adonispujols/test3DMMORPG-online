@@ -83,6 +83,7 @@
 
             socket.on('userConnected'), function(userIDCount){
                 userID = userIDCount;
+                console.log(userID);
             }
 
             socket.on('translateOnAxis', function(translateParams){
