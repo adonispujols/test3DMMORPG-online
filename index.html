@@ -44,8 +44,11 @@
         const geometry = new THREE.BoxGeometry(BOX_WIDTH, BOX_WIDTH, BOX_DEPTH);
         const material = new THREE.MeshPhongMaterial({color: 0x44aa88});
         const cube = new THREE.Mesh(geometry, material);
+        const cube2 = new THREE.Mesh(geometry, material);
+        cube2.position.set(2, 1, 0)
 
         scene.add(cube);
+        scene.add(cube2);
         function run() {
             const FRAMES_PER_SECOND = 33;
             renderer.render(scene, camera);
@@ -83,7 +86,7 @@
 
             socket.on('userConnected', function(userIDCount){
                 userID = userIDCount;
-                console.log(userID);
+                console.log("userID: " + userID);
             });
 
             socket.on('translateOnAxis', function(translateParams){
