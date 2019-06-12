@@ -44,7 +44,10 @@
         const geometry = new THREE.BoxGeometry(BOX_WIDTH, BOX_WIDTH, BOX_DEPTH);
         const material = new THREE.MeshPhongMaterial({color: 0x44aa88});
         const cube = new THREE.Mesh(geometry, material);
-        const cube2 = new THREE.Mesh(geometry, material);
+
+        const geometry2 = new THREE.BoxGeometry(BOX_WIDTH, BOX_WIDTH, BOX_DEPTH);
+        const material2 = new THREE.MeshPhongMaterial({color: 0x44aa88});
+        const cube2 = new THREE.Mesh(geometry2, material2);
         cube2.position.set(2, 1, 0);
         cube2.material.color.setHex(0x88aaff);
 
