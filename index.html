@@ -55,7 +55,7 @@
 
         $(function () {
             const socket = io();
-            var userID = 0;
+            var userID;
 
             window.addEventListener('keydown', onKeyDown);
             function onKeyDown(event) {
@@ -81,10 +81,10 @@
                 }
             }
 
-            socket.on('userConnected'), function(userIDCount){
+            socket.on('userConnected', function(userIDCount){
                 userID = userIDCount;
                 console.log(userID);
-            }
+            });
 
             socket.on('translateOnAxis', function(translateParams){
                 cube.translateOnAxis(new THREE.Vector3(translateParams.x, translateParams.y, translateParams.z), translateParams.distance);
