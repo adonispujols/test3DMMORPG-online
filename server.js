@@ -13,7 +13,6 @@ io.on('connection', function(socket){
     io.emit('userConnected', userIDCount);
     userIDCount += 1;
 
-
     socket.on('onKeyDown', function(key){
         var translateParams = {x:0, y:0, z:0, distance: 0}
         switch (key) {
