@@ -120,7 +120,7 @@
                     keys.forEach(function(key){
                         createNewBox(key, boxCoords[key]);
                     });
-
+                    boxMap[Object.keys(boxCoords).length - 1].add(camera);
                     setupKeyDownListener();
                 }
                 inGame = true;
