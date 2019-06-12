@@ -108,7 +108,8 @@
             });
 
             socket.on('userJoined', function(userID) {
-                $( ".submitID" ).remove();
+                const element = document.getElementById('submitID');
+                element.parentNode.removeChild(element);
                 if (inGame) {
                     createNewBox(userID);
                 } else {
