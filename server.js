@@ -6,6 +6,9 @@ const port = process.env.PORT || 3000;
 
 const boxCoords = {};
 
+var publicDir = require('path').join(__dirname,'/public');
+app.use(express.static(publicDir));
+
 app.get('/', function(req, res) {
     res.sendFile(__dirname + '/index.html');
 });
