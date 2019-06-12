@@ -45,7 +45,9 @@
         const material = new THREE.MeshPhongMaterial({color: 0x44aa88});
         const cube = new THREE.Mesh(geometry, material);
         const cube2 = new THREE.Mesh(geometry, material);
-        cube2.position.set(2, 1, 0)
+        cube2.position.set(2, 1, 0);
+
+        var cubeArray = [cube, cube2];
 
         scene.add(cube);
         scene.add(cube2);
@@ -59,6 +61,15 @@
         $(function () {
             const socket = io();
             var userID;
+
+            socket.on('userConnected', function(userIDCount){
+                userID = userIDCount;
+                console.log("userID: " + userID);
+            });
+
+            socket.on('translateOnAxis', function(data){
+                cubeArray[data.userID].translateOnAxis(new THREE.Vector3(data.translateParams.x, data.translateParams.y, data.translateParams.z), data.translateParams.distance);
+            });
 
             window.addEventListener('keydown', onKeyDown);
             function onKeyDown(event) {
@@ -80,18 +91,9 @@
                         key = "NOT_SUPPORTED";
                 }
                 if (key != "NOT_SUPPORTED") {
-                    socket.emit('onKeyDown', key);
+                    socket.emit('onKeyDown', {key: key, userID: userID});
                 }
             }
-
-            socket.on('userConnected', function(userIDCount){
-                userID = userIDCount;
-                console.log("userID: " + userID);
-            });
-
-            socket.on('translateOnAxis', function(translateParams){
-                cube.translateOnAxis(new THREE.Vector3(translateParams.x, translateParams.y, translateParams.z), translateParams.distance);
-            });
         });
     </script>
 </body>

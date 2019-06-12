@@ -13,9 +13,9 @@ io.on('connection', function(socket){
     io.emit('userConnected', userIDCount);
     userIDCount += 1;
 
-    socket.on('onKeyDown', function(key){
-        var translateParams = {x:0, y:0, z:0, distance: 0}
-        switch (key) {
+    socket.on('onKeyDown', function(data){
+        var translateParams = {x: 0, y: 0, z: 0, distance: 0}
+        switch (data.key) {
             case "left":
                 translateParams.x = 1;
                 translateParams.distance = -.1;
@@ -33,7 +33,7 @@ io.on('connection', function(socket){
                 translateParams.distance = .1;
                 break;
         }
-        io.emit('translateOnAxis', translateParams);
+        io.emit('translateOnAxis', {translateParams: translateParams, userID: data.userID});
     });
 });
 
