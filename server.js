@@ -1,13 +1,19 @@
-var app = require('express')();
-var http = require('http').Server(app);
-var io = require('socket.io')(http);
-var port = process.env.PORT || 3000;
+const app = require('express')();
+const http = require('http').Server(app);
+const io = require('socket.io')(http);
+const port = process.env.PORT || 3000;
+
+var userIDCount = 0;
 
 app.get('/', function(req, res){
     res.sendFile(__dirname + '/index.html');
 });
 
 io.on('connection', function(socket){
+    io.emit('userConnected', userIDCount);
+    userIDCount += 1;
+
+
     socket.on('onKeyDown', function(key){
         var translateParams = {x:0, y:0, z:0, distance: 0}
         switch (key) {

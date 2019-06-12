@@ -17,44 +17,45 @@
     <script src= "https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script>
         'use strict';
-       const canvas = document.querySelector('#canvas');
+        const canvas = document.querySelector('#canvas');
         const renderer = new THREE.WebGLRenderer({canvas});
         renderer.setSize( window.innerWidth * .9, window.innerHeight * .9);
         document.body.appendChild( renderer.domElement );
 
         const scene = new THREE.Scene();
 
-        const fov = 75;
-        const aspect = window.innerWidth/window.innerHeight;
-        const near = 0.1;
-        const far = 1000;
-        const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
+        const FOV = 75;
+        const ASPECT = window.innerWidth/window.innerHeight;
+        const NEAR = 0.1;
+        const FAR = 1000;
+        const camera = new THREE.PerspectiveCamera(FOV, ASPECT, NEAR, FAR);
         camera.position.y = 1.5;
         camera.position.z = 5;
 
-        const color = 0xFFFFFF;
-        const intensity = 1;
-        const light = new THREE.DirectionalLight(color, intensity);
+        const COLOR = 0xFFFFFF;
+        const INTENSITY = 1;
+        const light = new THREE.DirectionalLight(COLOR, INTENSITY);
         light.position.set(-1, 2, 4);
         scene.add(light);
 
-        const boxWidth = 1;
-        const boxHeight = 1;
-        const boxDepth = 1;
-        const geometry = new THREE.BoxGeometry(boxWidth, boxHeight, boxDepth);
+        const BOX_WIDTH = 1;
+        const BOX_HEIGHT = 1;
+        const BOX_DEPTH = 1;
+        const geometry = new THREE.BoxGeometry(BOX_WIDTH, BOX_WIDTH, BOX_DEPTH);
         const material = new THREE.MeshPhongMaterial({color: 0x44aa88});
         const cube = new THREE.Mesh(geometry, material);
 
         scene.add(cube);
         function run() {
-            const framesPerSecond = 33;
+            const FRAMES_PER_SECOND = 33;
             renderer.render(scene, camera);
-            var timer = setTimeout(run, framesPerSecond);
+            const timer = setTimeout(run, FRAMES_PER_SECOND);
         }
         run();
 
         $(function () {
-            var socket = io();
+            const socket = io();
+            var userID;
 
             window.addEventListener('keydown', onKeyDown);
             function onKeyDown(event) {
@@ -78,6 +79,10 @@
                 if (key != "NOT_SUPPORTED") {
                     socket.emit('onKeyDown', key);
                 }
+            }
+
+            socket.on('userConnected'), function(userIDCount){
+                userID = userIDCount;
             }
 
             socket.on('translateOnAxis', function(translateParams){
