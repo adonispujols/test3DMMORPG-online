@@ -3,6 +3,8 @@ const http = require('http').Server(app);
 const io = require('socket.io')(http);
 const port = process.env.PORT || 3000;
 
+const boxCoords = {};
+
 app.get('/', function(req, res) {
     res.sendFile(__dirname + '/index.html');
 });
@@ -10,6 +12,7 @@ app.get('/', function(req, res) {
 io.on('connection', function(socket) {
     socket.on('sentID', function(userID) {
         io.emit('userJoined', userID);
+        boxCoords[userID] = {x: 0, y: 0, z: 0};
     });
 
     socket.on('onKeyDown', function(data) {
@@ -18,18 +21,22 @@ io.on('connection', function(socket) {
             case "left":
                 translateParams.x = 1;
                 translateParams.distance = -.1;
+                boxCoords[data.userID].x += translateParams.distance;
                 break;
             case "up":
                 translateParams.z = 1;
                 translateParams.distance = -.1;
+                boxCoords[data.userID].z += translateParams.distance;
                 break;
             case "right":
                 translateParams.x = 1;
                 translateParams.distance = .1;
+                boxCoords[data.userID].x += translateParams.distance;
                 break;
             case "down":
                 translateParams.z = 1;
                 translateParams.distance = .1;
+                boxCoords[data.userID].z += translateParams.distance;
                 break;
         }
         io.emit('translateOnAxis', {translateParams: translateParams, userID: data.userID});
